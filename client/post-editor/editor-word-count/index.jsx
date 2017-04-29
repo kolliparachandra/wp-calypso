@@ -19,6 +19,10 @@ const user = userModule();
 export default React.createClass( {
 	displayName: 'EditorWordCount',
 
+	propTypes: {
+		selectedText: React.PropTypes.string
+	},
+
 	mixins: [ PureRenderMixin ],
 
 	getInitialState() {
@@ -64,7 +68,7 @@ export default React.createClass( {
 				return null;
 		}
 
-		const wordCount = textUtils.countWords( this.state.rawContent );
+		const wordCount = textUtils.countWords( ( this.props.selectedText || this.state.rawContent ) );
 
 		return (
 			<div className="editor-word-count">

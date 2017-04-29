@@ -98,6 +98,7 @@ const EVENTS = {
 	focus: 'onFocus',
 	hide: 'onHide',
 	init: 'onInit',
+	mouseUp: 'onMouseUp',
 	redo: 'onRedo',
 	remove: 'onRemove',
 	reset: 'onReset',
