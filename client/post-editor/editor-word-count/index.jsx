@@ -16,7 +16,7 @@ import textUtils from 'lib/text-utils';
  */
 const user = userModule();
 
-class EditorWordCount extends PureComponent {
+export class EditorWordCount extends PureComponent {
 	static propTypes = {
 		selectedText: React.PropTypes.string
 	};
