@@ -15,6 +15,7 @@ import { getPaymentMethodsGroup } from 'woocommerce/state/wc-api/payment-methods
 import List from 'woocommerce/components/list/list';
 import ListHeader from 'woocommerce/components/list/list-header';
 import ListItemField from 'woocommerce/components/list/list-item-field';
+import PaymentMethodEdit from './payment-method-edit';
 import PaymentMethodItem from './payment-method-item';
 
 class SettingsPaymentsOffSite extends Component {
@@ -29,7 +30,10 @@ class SettingsPaymentsOffSite extends Component {
 
 	renderMethodItem = ( method ) => {
 		return (
-			<PaymentMethodItem key={ method.title } method={ method } />
+			<div key={ method.title }>
+				<PaymentMethodItem method={ method } />
+				<PaymentMethodEdit settingsFields={ method.settings } />
+			</div>
 		);
 	}
 
