@@ -9,7 +9,7 @@ import debugFactory from 'debug';
 import {
 	WOOCOMMERCE_API_SET_ERROR,
 	WOOCOMMERCE_API_CLEAR_ERROR,
-} from '../action-types';
+} from 'woocommerce/state/action-types';
 
 const debug = debugFactory( 'woocommerce:wc-api:error' );
 
