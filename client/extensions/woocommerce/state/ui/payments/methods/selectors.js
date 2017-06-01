@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { get, find, findIndex, isNumber, remove } from 'lodash';
+import { get, filter, find, findIndex, remove } from 'lodash';
 
 /**
  * Internal dependencies
@@ -16,16 +16,29 @@ const getPaymentMethodsEdits = ( state, siteId ) => {
 /**
  * @param {Object} state Whole Redux state tree
  * @param {Number} [siteId] Site ID to check. If not provided, the Site ID selected in the UI will be used
+ * @return {Array} All changes made to method
+ */
+export const getPaymentMethodEdits = ( state, siteId ) => {
+	return get( state, [ 'extensions', 'woocommerce', 'ui', 'payments', siteId, 'methods', 'currentlyEditingChanges' ] );
+};
+
+/**
+ * @param {Object} state Whole Redux state tree
+ * @param {Number} [siteId] Site ID to check. If not provided, the Site ID selected in the UI will be used
  * @return {Array} The list of payment methods that the UI should show. That will be the list of methods returned by
  * the wc-api with the edits "overlayed" on top of them.
  */
 export const getPaymentMethods = ( state, siteId = getSelectedSiteId( state ) ) => {
-	if ( ! arePaymentMethodsLoaded( state, siteId ) || ! getPaymentMethodsEdits( state, siteId ) ) {
+	if ( ! arePaymentMethodsLoaded( state, siteId ) ) {
 		return [];
 	}
 	const methods = [ ...getApiPaymentMethods( state, siteId ) ];
+	const edits = getPaymentMethodsEdits( state, siteId );
+	if ( ! edits ) {
+		return methods;
+	}
 	// Overlay the current edits on top of (a copy of) the wc-api methods
-	const { creates, updates, deletes } = getPaymentMethodsEdits( state, siteId );
+	const { creates, updates, deletes } = edits;
 	deletes.forEach( ( { id } ) => remove( methods, { id } ) );
 	updates.forEach( ( update ) => {
 		const index = findIndex( methods, { id: update.id } );
@@ -46,7 +59,7 @@ export const getPaymentMethods = ( state, siteId = getSelectedSiteId( state ) ) 
  * @return {Array} Array of Payment Methods of requested type
  */
 export function getPaymentMethodsGroup( state, type, siteId = getSelectedSiteId( state ) ) {
-	return find( getPaymentMethods( state, siteId ), { methodType: type } );
+	return filter( getPaymentMethods( state, siteId ), { methodType: type } );
 }
 
 /**
@@ -56,15 +69,23 @@ export function getPaymentMethodsGroup( state, type, siteId = getSelectedSiteId(
  * (including the non-committed changes). If no method is being edited, this will return null.
  */
 export const getCurrentlyEditingPaymentMethod = ( state, siteId = getSelectedSiteId( state ) ) => {
-	const { currentlyEditingId, currentlyEditingChanges } = getPaymentMethodsEdits( state, siteId );
-	if ( null === currentlyEditingId ) {
+	const edits = getPaymentMethodsEdits( state, siteId );
+	if ( ! edits ) {
 		return null;
 	}
-	const method = find( getPaymentMethods( state, siteId ), { id: currentlyEditingId } );
+	if ( null === edits.currentlyEditingId ) {
+		return null;
+	}
+
+	const method = find( getPaymentMethods( state, siteId ), { id: edits.currentlyEditingId } );
 	if ( ! method ) {
 		return null;
 	}
-	return { ...method, ...currentlyEditingChanges };
+	const settings = { ...method.settings };
+	Object.keys( edits.currentlyEditingChanges ).forEach( function( edit ) {
+		settings[ edit ] = { ...settings[ edit ], ...edits.currentlyEditingChanges[ edit ] };
+	} );
+	return { ...method, settings };
 };
 
 /**
@@ -75,28 +96,3 @@ export const getCurrentlyEditingPaymentMethod = ( state, siteId = getSelectedSit
 export const isCurrentlyEditingPaymentMethod = ( state, siteId = getSelectedSiteId( state ) ) => {
 	return Boolean( getCurrentlyEditingPaymentMethod( state, siteId ) );
 };
-
-/**
- * @param {Number|Object} methodId Method ID (can be a temporal ID)
- * @return {Boolean} Whether this method is considered "editable". As a rule, every method is editable,
- * except the "Rest Of The World" method, which always has id = 0.
- */
-const isEditablePaymentMethod = ( methodId ) => ! isNumber( methodId ) || 0 !== methodId;
-
-/**
- * @param {Number|Object} methodId Method ID (can be a temporal ID)
- * @return {Boolean} Whether the name of this payment method can be changed by the user
- */
-export const canChangePaymentMethodTitle = isEditablePaymentMethod;
-
-/**
- * @param {Number|Object} methodId Method ID (can be a temporal ID)
- * @return {Boolean} Whether this payment method can be deleted
- */
-export const canRemovePaymentMethod = isEditablePaymentMethod;
-
-/**
- * @param {Number|Object} methodId Method ID (can be a temporal ID)
- * @return {Boolean} Whether the locations this method represents can be altered.
- */
-export const canEditPaymentMethodLocations = isEditablePaymentMethod;

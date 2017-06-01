@@ -7,6 +7,7 @@ import { localize } from 'i18n-calypso';
 /**
  * Internal dependencies
  */
+import Button from 'components/button';
 import FormPasswordInput from 'components/forms/form-password-input';
 import FormTextInput from 'components/forms/form-text-input';
 import FormSelect from 'components/forms/form-select';
@@ -16,18 +17,28 @@ import ListItem from '../../../components/list/list-item';
 class PaymentMethodEdit extends Component {
 
 	static propTypes = {
-		settingsFields: PropTypes.object,
+		method: PropTypes.object,
+		translate: PropTypes.func,
+		onEditField: PropTypes.func,
 	};
+
+	onEditFieldHandler = ( e ) => {
+		this.props.onEditField( e.target.name, e.target.value );
+	}
+
+	onSaveHandler = () => {
+		this.props.onSave( this.props.method );
+	}
 
 	renderEditCheckbox = ( setting ) => {
 		const checked = setting.value === 'yes';
 		return (
-			<FormToggle checked={ checked } />
+			<FormToggle name={ setting.id } onChange={ this.onEditFieldHandler } checked={ checked } />
 		);
 	}
 
 	renderEditField = ( editField ) => {
-		const setting = this.props.settingsFields[ editField ];
+		const setting = this.props.method.settings[ editField ];
 		return (
 			<div className="payments__method-edit-field-container" key={ editField }>
 				{ setting.label }
@@ -43,14 +54,14 @@ class PaymentMethodEdit extends Component {
 
 	renderEditPassword = ( setting ) => {
 		return (
-			<FormPasswordInput value={ setting.value } />
+			<FormPasswordInput name={ setting.id } onChange={ this.onEditFieldHandler } value={ setting.value } />
 		);
 	}
 
 	renderEditSelect = ( setting ) => {
 		const optionKeys = Object.keys( setting.options );
 		return (
-			<FormSelect value={ setting.value }>
+			<FormSelect name={ setting.id } onChange={ this.onEditFieldHandler } value={ setting.value }>
 				{ optionKeys && optionKeys.map( ( option ) => {
 					return this.renderSelectOptions( option, setting.options[ option ] );
 				} ) }
@@ -60,7 +71,7 @@ class PaymentMethodEdit extends Component {
 
 	renderEditTextbox = ( setting ) => {
 		return (
-			<FormTextInput value={ setting.value } />
+			<FormTextInput name={ setting.id } onChange={ this.onEditFieldHandler } value={ setting.value } />
 		);
 	}
 
@@ -71,8 +82,8 @@ class PaymentMethodEdit extends Component {
 	}
 
 	render() {
-		const { settingsFields } = this.props;
-		const settingsFieldsKeys = Object.keys( settingsFields );
+		const { method, translate } = this.props;
+		const settingsFieldsKeys = Object.keys( method.settings );
 		return (
 			<ListItem>
 				{
@@ -80,6 +91,9 @@ class PaymentMethodEdit extends Component {
 					settingsFieldsKeys.length &&
 					settingsFieldsKeys.map( this.renderEditField )
 				}
+				<Button compact onClick={ this.onSaveHandler }>
+					{ translate( 'save' ) }
+				</Button>
 			</ListItem>
 		);
 	}

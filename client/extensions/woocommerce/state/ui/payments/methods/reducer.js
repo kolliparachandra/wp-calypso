@@ -1,21 +1,19 @@
 /**
  * External dependencies
  */
-import { isEmpty, isEqual, reject } from 'lodash';
+import { isEmpty, isEqual } from 'lodash';
 
 /**
  * Internal dependencies
  */
 import { createReducer } from 'state/utils';
 import {
-	WOOCOMMERCE_PAYMENT_METHOD_ADD,
 	WOOCOMMERCE_PAYMENT_METHOD_CANCEL,
 	WOOCOMMERCE_PAYMENT_METHOD_CLOSE,
-	WOOCOMMERCE_PAYMENT_METHOD_EDIT_NAME,
+	WOOCOMMERCE_PAYMENT_METHOD_EDIT_FIELD,
 	WOOCOMMERCE_PAYMENT_METHOD_OPEN,
-	WOOCOMMERCE_PAYMENT_METHOD_REMOVE,
 } from '../../../action-types';
-import { nextBucketIndex, getBucket } from '../../helpers';
+import { getBucket } from '../../helpers';
 
 const initialState = {
 	creates: [],
@@ -23,12 +21,6 @@ const initialState = {
 	deletes: [],
 	currentlyEditingId: null,
 };
-
-function paymentMethodAddAction( state ) {
-	const id = nextBucketIndex( state.creates );
-	// The action of "adding" a method must not alter the edits, since the user can cancel the method edit later
-	return paymentMethodOpenAction( state, { payload: { id } } );
-}
 
 function paymentMethodCancelAction( state ) {
 	// "Canceling" editing a method is equivalent at "closing" it without any changes
@@ -71,13 +63,13 @@ function paymentMethodCloseAction( state ) {
 	};
 }
 
-function paymentMethodEditNameAction( state, { payload: { name } } ) {
+function paymentMethodEditFieldAction( state, { payload: { field, value } } ) {
 	if ( null === state.currentlyEditingId ) {
 		return state;
 	}
 	return { ...state,
 		currentlyEditingChanges: { ...state.currentlyEditingChanges,
-			name,
+			[ field ]: { value },
 		},
 	};
 }
@@ -89,27 +81,9 @@ function paymentMethodOpenAction( state, { payload: { id } } ) {
 	};
 }
 
-function paymentMethodRemoveAction( state, { payload: { id } } ) {
-	const newState = { ...state,
-		currentlyEditingId: null,
-	};
-
-	const bucket = getBucket( { id } );
-	if ( 'updates' === bucket ) {
-		// We only need to add it to the list of "methods to delete" if the method was already present in the server
-		newState.deletes = [ ...state.deletes, { id } ];
-	}
-	// In any case, remove the method edits from the bucket where they were
-	newState[ bucket ] = reject( state[ bucket ], { id } );
-
-	return newState;
-}
-
 export default createReducer( initialState, {
-	[ WOOCOMMERCE_PAYMENT_METHOD_ADD ]: paymentMethodAddAction,
 	[ WOOCOMMERCE_PAYMENT_METHOD_CANCEL ]: paymentMethodCancelAction,
 	[ WOOCOMMERCE_PAYMENT_METHOD_CLOSE ]: paymentMethodCloseAction,
-	[ WOOCOMMERCE_PAYMENT_METHOD_EDIT_NAME ]: paymentMethodEditNameAction,
+	[ WOOCOMMERCE_PAYMENT_METHOD_EDIT_FIELD ]: paymentMethodEditFieldAction,
 	[ WOOCOMMERCE_PAYMENT_METHOD_OPEN ]: paymentMethodOpenAction,
-	[ WOOCOMMERCE_PAYMENT_METHOD_REMOVE ]: paymentMethodRemoveAction,
 } );

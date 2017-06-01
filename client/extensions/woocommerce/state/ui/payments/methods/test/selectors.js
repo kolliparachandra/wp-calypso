@@ -56,6 +56,32 @@ describe( 'selectors', () => {
 			expect( getPaymentMethods( state ) ).to.deep.equal( [] );
 		} );
 
+		it( 'should return the WC-API methods list if there are no edits in the state', () => {
+			const state = {
+				extensions: {
+					woocommerce: {
+						wcApi: {
+							123: {
+								paymentMethods: [
+									{ id: 1, name: 'Method1' },
+									{ id: 2, name: 'Method2' },
+								],
+							},
+						},
+						ui: {},
+					},
+				},
+				ui: {
+					selectedSiteId: 123,
+				},
+			};
+
+			expect( getPaymentMethods( state ) ).to.deep.equal( [
+				{ id: 1, name: 'Method1' },
+				{ id: 2, name: 'Method2' },
+			] );
+		} );
+
 		it( 'should apply the "edits" changes to the method list', () => {
 			const state = {
 				extensions: {
