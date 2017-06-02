@@ -25,6 +25,12 @@ const _request = ( func, path, siteId, body = {} ) => {
 			.then( ( { data } ) => omitDeep( data, '_links' ) );
 };
 
+const _requestWithBody = ( func, path, siteId, body = {} ) => {
+	const bodyString = JSON.stringify( body );
+	return func( { path: `/jetpack-blogs/${ siteId }/rest-api/` }, { path: '/wc/v2/' + path, body: bodyString, json: true, } )
+			.then( ( { data } ) => omitDeep( data, '_links' ) );
+};
+
 const addURLParam = ( url, param ) => url + ( -1 !== url.indexOf( '?' ) ? '?' : '&' ) + param;
 
 /**
@@ -48,7 +54,7 @@ export default ( siteId ) => ( {
 	 * @param {Object} body Payload to send
 	 * @return {Promise} Resolves with the JSON response, or rejects with an error
 	 */
-	post: ( path, body ) => _request( wp.req.post.bind( wp.req ), path, siteId, body ),
+	post: ( path, body ) => _requestWithBody( wp.req.post.bind( wp.req ), path, siteId, body ),
 
 	/**
 	 * Sends a PUT request to the API.
@@ -58,7 +64,7 @@ export default ( siteId ) => ( {
 	 * @param {Object} body Payload to send
 	 * @return {Promise} Resolves with the JSON response, or rejects with an error
 	 */
-	put: ( path, body ) => _request( wp.req.post.bind( wp.req ), addURLParam( path, '_method=put' ), siteId, body ),
+	put: ( path, body ) => _requestWithBody( wp.req.post.bind( wp.req ), addURLParam( path, '_method=put' ), siteId, body ),
 
 	/**
 	 * Sends a DELETE request to the API.

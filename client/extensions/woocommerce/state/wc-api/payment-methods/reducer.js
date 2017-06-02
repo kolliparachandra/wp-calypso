@@ -25,14 +25,10 @@ export default {
 		};
 	},
 	[ WOOCOMMERCE_API_PAYMENT_METHOD_SAVE ]: ( state ) => {
-		return { ...state,
-			paymentMethods: LOADING,
-		};
+		return { ...state };
 	},
 
-	[ WOOCOMMERCE_API_PAYMENT_METHOD_SAVE_SUCCESS ]: ( state, { payload: { data } } ) => {
-		return { ...state,
-			paymentMethods: data,
-		};
+	[ WOOCOMMERCE_API_PAYMENT_METHOD_SAVE_SUCCESS ]: ( state ) => {
+		return { ...state };
 	},
 };

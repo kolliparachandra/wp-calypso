@@ -57,14 +57,12 @@ export const fetchPaymentMethods = ( siteId ) => ( dispatch, getState ) => {
 };
 
 export const paymentMethodSaveSuccess = ( siteId, data ) => {
-	const paymentMethods = data.map( ( method ) => {
-		return { ...method, ...getPaymentMethodDetails( method.id ) };
-	} );
+	const paymentMethod = { ...data, ...getPaymentMethodDetails( data.id ) };
 	return {
 		type: WOOCOMMERCE_API_PAYMENT_METHOD_SAVE_SUCCESS,
 		payload: {
 			siteId,
-			data: paymentMethods,
+			data: paymentMethod,
 		},
 	};
 };
@@ -74,8 +72,12 @@ export const paymentMethodSave = ( siteId, method ) => ( dispatch, getState ) =>
 	if ( ! siteId ) {
 		siteId = getSelectedSiteId( state );
 	}
-	const body = { settings: getPaymentMethodEdits( state, siteId ) };
-
+	const rawEdits = getPaymentMethodEdits( state, siteId );
+	const edits = {};
+	Object.keys( rawEdits ).map( function( editKey ) {
+		return edits[ editKey ] = rawEdits[ editKey ].value;
+	} );
+	const body = { settings: edits };
 	const getAction = {
 		type: WOOCOMMERCE_API_PAYMENT_METHOD_SAVE,
 		payload: { siteId },
@@ -85,7 +87,7 @@ export const paymentMethodSave = ( siteId, method ) => ( dispatch, getState ) =>
 
 	return request( siteId ).put( `payment_gateways/${ method.id }`, body )
 		.then( ( data ) => {
-			dispatch( fetchPaymentMethodsSuccess( siteId, data ) );
+			dispatch( paymentMethodSaveSuccess( siteId, data ) );
 		} )
 		.catch( err => {
 			dispatch( setError( siteId, getAction, err ) );
