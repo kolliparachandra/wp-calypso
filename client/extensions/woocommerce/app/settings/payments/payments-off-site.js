@@ -16,8 +16,8 @@ import {
 } from 'woocommerce/state/ui/payments/methods/actions';
 import ExtendedHeader from 'woocommerce/components/extended-header';
 import { fetchPaymentMethods, paymentMethodSave } from 'woocommerce/state/wc-api/payment-methods/actions';
-import { getCurrentlyEditingPaymentMethod, getPaymentMethodsGroup } from 'woocommerce/state/wc-api/payment-methods/selectors';
-import { getSelectedSiteId } from 'state/ui/selectors';
+import { getPaymentMethodsGroup } from 'woocommerce/state/wc-api/payment-methods/selectors';
+import { getCurrentlyEditingPaymentMethod, getSelectedSiteId } from 'state/ui/selectors';
 import List from 'woocommerce/components/list/list';
 import ListHeader from 'woocommerce/components/list/list-header';
 import ListItemField from 'woocommerce/components/list/list-item-field';
