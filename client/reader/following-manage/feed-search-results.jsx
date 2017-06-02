@@ -66,8 +66,9 @@ const FollowingManageSearchFeedsResults = ( {
 				rowRenderer={ siteRowRenderer }
 				renderEventName={ 'following_manage_search' }
 			/>
-			<div className="following-manage__show-more">
-				{ searchResultsCount > 10 &&
+			{ ! showMoreResults &&
+				searchResultsCount > 10 &&
+				<div className="following-manage__show-more">
 					<Button
 						compact
 						icon
@@ -76,8 +77,8 @@ const FollowingManageSearchFeedsResults = ( {
 					>
 						<Gridicon icon="chevron-down" />
 						{ translate( 'Show more' ) }
-					</Button> }
-			</div>
+					</Button>
+				</div> }
 		</div>
 	);
 };
