@@ -9,7 +9,12 @@ import {
 	CellMeasurer,
 	InfiniteLoader,
 } from 'react-virtualized';
-import { debounce, noop } from 'lodash';
+import { debounce, noop, get } from 'lodash';
+
+/**
+ * Internal Dependencies
+ */
+import { recordTracksRailcarRender } from 'reader/stats';
 
 class ReaderInfiniteStream extends Component {
 	static propTypes = {
@@ -22,6 +27,7 @@ class ReaderInfiniteStream extends Component {
 		windowScrollerRef: PropTypes.func,
 		extraRenderItemProps: PropTypes.object,
 		minHeight: PropTypes.number,
+		renderEventName: PropTypes.string,
 	};
 
 	static defaultProps = {
@@ -36,13 +42,30 @@ class ReaderInfiniteStream extends Component {
 		minHeight: this.props.minHeight,
 	} );
 
-	rowRenderer = rowRendererProps =>
-		this.props.rowRenderer( {
+	// todo what is eventName / ui_algo?
+	recordTraintrackForRowRender = ( { index, railcar, eventName } ) => {
+		recordTracksRailcarRender( eventName, railcar, { ui_algo: eventName, ui_position: index } );
+	};
+
+	rowRenderer = rowRendererProps => {
+		const railcar = get( this.props.items[ rowRendererProps.index ], 'railcar' );
+		if ( railcar && this.props.renderEventName ) {
+			this.recordTraintrackForRowRender(
+				{
+					index: rowRendererProps.index,
+					railcar,
+					eventName: this.props.renderEventName,
+				},
+			);
+		}
+
+		return this.props.rowRenderer( {
 			items: this.props.items,
 			extraRenderItemProps: this.props.extraRenderItemProps,
 			rowRendererProps,
 			measuredRowRenderer: this.measuredRowRenderer,
 		} );
+	};
 
 	measuredRowRenderer = ( ComponentToMeasure, props, { key, index, style, parent } ) => (
 		<CellMeasurer
