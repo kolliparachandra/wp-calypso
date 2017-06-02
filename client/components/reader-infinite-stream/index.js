@@ -104,7 +104,7 @@ class ReaderInfiniteStream extends Component {
 	render() {
 		const { hasNextPage, width } = this.props;
 		const rowCount = hasNextPage( this.props.items.length )
-			? this.props.items.length + 1
+			? this.props.items.length + 10
 			: this.props.items.length;
 
 		return (
