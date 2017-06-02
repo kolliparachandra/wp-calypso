@@ -9,7 +9,7 @@ import url from 'url';
 /**
  * Internal dependencies
  */
-import { PUBLICIZE_SERVICES_LABEL_ICON } from '../../../../state/stats/lists/constants';
+import SocialLogo from 'social-logos';
 
 class ShareWidget extends Component {
 	static propTypes = {
@@ -22,7 +22,7 @@ class ShareWidget extends Component {
 		const { translate, urlToShare } = this.props;
 		const services = [
 			{
-				slug: 'facebook',
+				icon: 'facebook',
 				urlProperties: {
 					scheme: 'https',
 					hostname: 'www.facebook.com',
@@ -34,7 +34,7 @@ class ShareWidget extends Component {
 				},
 			},
 			{
-				slug: 'twitter',
+				icon: 'twitter',
 				urlProperties: {
 					scheme: 'https',
 					hostname: 'twitter.com',
@@ -47,7 +47,7 @@ class ShareWidget extends Component {
 				},
 			},
 			{
-				slug: 'google_plus',
+				icon: 'google-plus',
 				urlProperties: {
 					scheme: 'https',
 					hostname: 'plus.google.com',
@@ -58,7 +58,7 @@ class ShareWidget extends Component {
 				},
 			},
 			{
-				slug: 'linkedin',
+				icon: 'linkedin',
 				urlProperties: {
 					scheme: 'https',
 					hostname: 'www.linkedin.com',
@@ -70,7 +70,7 @@ class ShareWidget extends Component {
 				},
 			},
 			{
-				slug: 'tumblr',
+				icon: 'tumblr',
 				urlProperties: {
 					scheme: 'https',
 					hostname: 'www.tumblr.com',
@@ -83,19 +83,28 @@ class ShareWidget extends Component {
 					}
 				},
 			},
+			{
+				icon: 'pinterest',
+				urlProperties: {
+					scheme: 'https',
+					hostname: 'www.pinterest.com',
+					pathname: 'pin/create/button',
+					query: {
+						url: urlToShare,
+					}
+				},
+			},
 		];
 
 		return (
 			<ul className="share-widget__services">
 				{
 					services.map( ( service ) => {
-						const src = PUBLICIZE_SERVICES_LABEL_ICON[ service.slug ].icon;
 						const link = url.format( service.urlProperties );
-						const title = PUBLICIZE_SERVICES_LABEL_ICON[ service.slug ].label;
 						return (
 							<li className="share-widget__service" key={ service.slug }>
 								<a href={ link } rel="noopener noreferrer" target="_blank">
-									<img alt={ title } src={ src } width={ 48 } />
+									<SocialLogo icon={ service.icon } size={ 48 } />
 								</a>
 							</li>
 						);
