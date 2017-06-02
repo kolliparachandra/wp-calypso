@@ -7,10 +7,9 @@ import React, { PropTypes } from 'react';
  * Internal dependencies
  */
 
-const ExtensionsWidget = ( { className, site } ) => {
+const ExtensionsWidget = ( { className } ) => {
 	return (
 		<div className={ className } >
-			{ site.slug }
 		</div>
 	);
 };

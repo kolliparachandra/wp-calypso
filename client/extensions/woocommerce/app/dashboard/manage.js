@@ -6,8 +6,8 @@ import React, { Component, PropTypes } from 'react';
 /**
  * Internal dependencies
  */
-import ManageNoOrders from 'manage-no-orders';
-import ManageOrders from 'manage-orders';
+import ManageNoOrders from './manage-no-orders';
+import ManageOrders from './manage-orders';
 
 class Manage extends Component {
 	static propTypes = {
@@ -18,10 +18,10 @@ class Manage extends Component {
 
 	render = () => {
 		const { site } = this.props;
-		const storeHasOrders = true; // TODO - hook up to a selector
+		const storeHasOrders = false; // TODO - hook up to a selector
 
 		return (
-			<div className="dashboard__manage">
+			<div className="dashboard__manage-wrapper">
 			{
 				storeHasOrders ? <ManageOrders site={ site } /> : <ManageNoOrders site={ site } />
 			}

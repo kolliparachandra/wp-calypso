@@ -9,6 +9,7 @@ import { localize } from 'i18n-calypso';
  */
 import Button from 'components/button';
 import ExtensionsWidget from '../../components/extensions-widget';
+import { getLink } from '../../lib/nav-utils';
 import ProcessOrdersWidget from '../../components/process-orders-widget';
 import ReadingWidget from '../../components/reading-widget';
 import ShareWidget from '../../components/share-widget';
@@ -20,11 +21,6 @@ class ManageOrders extends Component {
 			slug: PropTypes.string.isRequired,
 		} ),
 	};
-
-	itemLink = ( path ) => {
-		const link = path.replace( ':site', this.props.site.slug );
-		return link;
-	}
 
 	renderProcessOrdersWidget = () => {
 		const { site } = this.props;
@@ -90,12 +86,12 @@ class ManageOrders extends Component {
 
 	possiblyRenderShareWidget = () => {
 		// TODO - connect to display preferences in a follow-on PR
-		const { translate } = this.props;
+		const { site, translate } = this.props;
 		return (
 			<ShareWidget
 				text={ translate( 'Share a link to your store on social media.' ) }
 				title={ translate( 'Share your store' ) }
-				urlToShare={ this.itemLink( 'https://:site' ) }
+				urlToShare={ getLink( 'https://:site', site ) }
 			/>
 		);
 	}
@@ -124,7 +120,7 @@ class ManageOrders extends Component {
 	}
 
 	render = () => {
-		const { translate } = this.props;
+		const { site, translate } = this.props;
 		return (
 			<div className="dashboard__manage-no-orders">
 				<h2>
@@ -142,11 +138,11 @@ class ManageOrders extends Component {
 					{ this.possiblyRenderTopSellersWidget() }
 					( this.possiblyRenderTopReferrersWidget() }
 				</WidgetGroup>
-				<Button href={ this.itemLink( '/store/stats/orders/day/:site' ) }>
+				<Button href={ getLink( '/store/stats/orders/day/:site', site ) }>
 					{ translate( 'View full reports' ) }
 				</Button>
 				<WidgetGroup
-					maxColumns="3"
+					maxColumns={ 3 }
 					title={ translate( 'Here are some highlighted opportunities based on this weeks\' stats' ) }
 				>
 					{ this.possiblyRenderTrafficSpikeWidget() }

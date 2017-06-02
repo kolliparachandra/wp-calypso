@@ -1,0 +1,34 @@
+.share-widget__container {
+	align-items: center;
+	background-color: $white;
+	background-image: url( '/calypso/images/extensions/woocommerce/woocommerce-share.svg' );
+	background-position: center bottom;
+	background-repeat: no-repeat;
+	display: flex;
+	flex-direction: column;
+	min-height: 320px;
+	padding: 72px;
+
+	h2 {
+		font-size: 28px;
+		text-align: center;
+	}
+
+	p {
+		color: $gray;
+		font-size: 14px;
+		text-align: center;
+	}
+
+	ul {
+		list-style-type: none;
+		margin: 32px 0 0 0;
+		max-width: 450px;
+
+		li {
+			display: inline-block;
+			max-width: 450px;
+			margin: 0 8px 0 8px;
+		}
+	}
+}

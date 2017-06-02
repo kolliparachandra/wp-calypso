@@ -9,6 +9,7 @@ import { localize } from 'i18n-calypso';
  */
 import BasicWidget from '../../components/basic-widget';
 import ExtensionsWidget from '../../components/extensions-widget';
+import { getLink } from '../../lib/nav-utils';
 import ReadingWidget from '../../components/reading-widget';
 import ShareWidget from '../../components/share-widget';
 import WidgetGroup from '../../components/widget-group';
@@ -20,20 +21,15 @@ class ManageNoOrders extends Component {
 		} ),
 	};
 
-	itemLink = ( path ) => {
-		const link = path.replace( ':site', this.props.site.slug );
-		return link;
-	}
-
 	renderShareWidget = () => {
-		const { translate } = this.props;
+		const { site, translate } = this.props;
 		return (
 			<ShareWidget
 				text={ translate( 'Now that your setup is complete it\'s time to spread the word' +
 					' and get those first orders rolling in. Share a link with your friends,' +
 					' family & followers now.' ) }
 				title={ translate( 'Your store is ready & the world is waiting!' ) }
-				urlToShare={ this.itemLink( 'https://:site' ) }
+				urlToShare={ getLink( 'https://:site', site ) }
 			/>
 		);
 	}
@@ -53,12 +49,12 @@ class ManageNoOrders extends Component {
 	}
 
 	renderPlansWidget = () => {
-		const { translate } = this.props;
+		const { site, translate } = this.props;
 		return (
 			<BasicWidget
 				className="dashboard__plans-widget"
 				buttonLabel={ translate( 'View info & plans' ) }
-				buttonLink={ this.itemLink( '/plans/:site' ) }
+				buttonLink={ getLink( '/plans/:site', site ) }
 				imageSource="/calypso/images/extensions/woocommerce/plans.svg"
 				text={ translate( 'World-class Backups & Security for WordPress.' ) }
 				title={ translate( 'Secure your store with VaultPress' ) }
@@ -73,11 +69,11 @@ class ManageNoOrders extends Component {
 	}
 
 	renderExampleOrderWidget = () => {
-		const { translate } = this.props;
+		const { site, translate } = this.props;
 		return (
 			<BasicWidget
 				buttonLabel={ translate( 'View an example order' ) }
-				buttonLink={ this.itemLink( '/store/orders/:site/example' ) }
+				buttonLink={ getLink( '/store/orders/:site/example', site ) }
 				className="dashboard__example-order-widget"
 				title={ translate( 'Looking for orders and reports?' ) }
 			>
@@ -89,11 +85,11 @@ class ManageNoOrders extends Component {
 	}
 
 	renderViewAndTestWidget = () => {
-		const { translate } = this.props;
+		const { site, translate } = this.props;
 		return (
 			<BasicWidget
 				buttonLabel={ translate( 'View & test your store' ) }
-				buttonLink={ this.itemLink( 'https://:site' ) }
+				buttonLink={ getLink( 'https://:site', site ) }
 				className="dashboard__view-and-test-widget"
 				title={ translate( 'Test all the things' ) }
 			>
