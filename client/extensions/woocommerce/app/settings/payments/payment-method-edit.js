@@ -12,7 +12,7 @@ import FormPasswordInput from 'components/forms/form-password-input';
 import FormTextInput from 'components/forms/form-text-input';
 import FormSelect from 'components/forms/form-select';
 import FormToggle from 'components/forms/form-toggle';
-import ListItem from '../../../components/list/list-item';
+import ListItem from 'woocommerce/components/list/list-item';
 
 class PaymentMethodEdit extends Component {
 
