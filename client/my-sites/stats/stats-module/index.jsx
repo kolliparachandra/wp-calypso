@@ -82,8 +82,11 @@ class StatsModule extends Component {
 	}
 
 	getHref() {
-		const { summary, period, path, siteSlug } = this.props;
-
+		const { summary, period, path, siteSlug, statType } = this.props;
+		// For now...
+		if ( statType === 'statsTopSellers' ) {
+			return null;
+		}
 		// Some modules do not have view all abilities
 		if ( ! summary && period && path && siteSlug ) {
 			return '/stats/' + period.period + '/' + path + '/' + siteSlug + '?startDate=' + period.startOf.format( 'YYYY-MM-DD' );

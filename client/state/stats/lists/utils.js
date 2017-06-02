@@ -683,6 +683,17 @@ export const normalizers = {
 		return parseChartData( payload );
 	},
 
+	statsTopSellers( payload ) {
+		if ( ! payload || ! payload.data ) {
+			return [];
+		}
+		return payload.data.map( d => {
+			d.label = d.name;
+			d.value = d.sold * d.price;
+			return d;
+		} );
+	},
+
 	/*
 	 * Returns a normalized statsSearchTerms array, ready for use in stats-module
 	 *

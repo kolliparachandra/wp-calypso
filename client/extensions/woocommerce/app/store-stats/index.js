@@ -12,6 +12,7 @@ import Main from 'components/main';
 import Navigation from './store-stats-navigation';
 import { getSelectedSiteId } from 'state/ui/selectors';
 import Chart from './store-stats-chart';
+import StatsModule from 'my-sites/stats/stats-module';
 
 class StoreStats extends Component {
 	static propTypes = {
@@ -30,6 +31,12 @@ class StoreStats extends Component {
 			date: today,
 			quantity: '30'
 		};
+		const topSellersQuery = {
+			unit,
+			date: selectedDate,
+			quantity: "7",
+			limit: "3"
+		};
 		return (
 			<Main className="store-stats woocommerce" wideLayout={ true }>
 				<Navigation unit={ unit } type="orders" />
@@ -40,6 +47,14 @@ class StoreStats extends Component {
 					siteId={ siteId }
 					unit={ unit }
 				/>
+				<div className="stats__module-column">
+					<StatsModule
+						path="top-sellers"
+						moduleStrings={ { title: 'Products', item: 'Title' , value: 'Total', empty: 'No Products' } }
+						period={ { period: unit } }
+						query={ topSellersQuery }
+						statType="statsTopSellers" />
+				</div>
 			</Main>
 		);
 	}
