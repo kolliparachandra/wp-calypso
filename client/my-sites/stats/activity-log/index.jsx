@@ -20,6 +20,7 @@ import ActivityLogDay from '../activity-log-day';
 class ActivityLog extends Component {
 	componentDidMount() {
 		window.scrollTo( 0, 0 );
+		this.props.dispatch( { type: 'ACTIVITY_LOG_FETCH', siteId: this.props.siteId } );
 	}
 
 	logs = () => [
@@ -307,6 +308,7 @@ export default connect(
 		const isJetpack = isJetpackSite( state, siteId );
 		return {
 			isJetpack,
+			siteId,
 			slug: getSiteSlug( state, siteId )
 		};
 	}
