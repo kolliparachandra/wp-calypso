@@ -20,8 +20,7 @@ class ReaderInfiniteStream extends Component {
 		hasNextPage: PropTypes.func,
 		forceRefresh: PropTypes.any, // forceRefresh can be anything -- if truthy then will force rv to update grid
 		windowScrollerRef: PropTypes.func,
-		showLastUpdatedDate: PropTypes.bool,
-		followSource: PropTypes.string,
+		extraRenderItemProps: PropTypes.object,
 		minHeight: PropTypes.number,
 	};
 
@@ -39,9 +38,8 @@ class ReaderInfiniteStream extends Component {
 
 	rowRenderer = rowRendererProps =>
 		this.props.rowRenderer( {
-			followSource: this.props.followSource,
-			showLastUpdatedDate: this.props.showLastUpdatedDate,
-			sites: this.props.items,
+			items: this.props.items,
+			extraRenderItemProps: this.props.extraRenderItemProps,
 			rowRendererProps,
 			measuredRowRenderer: this.measuredRowRenderer,
 		} );

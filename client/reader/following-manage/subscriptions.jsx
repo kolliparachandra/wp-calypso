@@ -29,6 +29,7 @@ import PopoverMenuItem from 'components/popover/menu-item';
 import { formatUrlForDisplay, getFeedTitle } from 'reader/lib/feed-display-helper';
 import { addQueryArgs } from 'lib/url';
 import { READER_SUBSCRIPTIONS } from 'reader/follow-button/follow-sources';
+import { recordTracksRailcarRender } from 'reader/stats';
 
 class FollowingManageSubscriptions extends Component {
 	static propTypes = {
@@ -78,6 +79,13 @@ class FollowingManageSubscriptions extends Component {
 		page.replace( addQueryArgs( { sort }, window.location.pathname + window.location.search ) );
 	};
 
+	recordResultRender = index => railcar =>
+		recordTracksRailcarRender(
+			'following_manage_subscription',
+			railcar,
+			{ ui_algo: 'following_manage_subscription', ui_position: index }
+		);
+
 	render() {
 		const { width, translate, query, followsCount, sortOrder, feeds } = this.props;
 		const filteredFollows = this.filterFollowsByQuery( query );
@@ -123,10 +131,13 @@ class FollowingManageSubscriptions extends Component {
 					{ ! noSitesMatchQuery &&
 						<InfiniteStream
 							items={ sortedFollows }
+							extraRenderItemProps={ {
+								followSource: READER_SUBSCRIPTIONS,
+								recordResultRender: this.recordResultRender,
+							} }
 							width={ width }
 							forceRefresh={ [ feeds, sortedFollows ] }
 							windowScrollerRef={ this.props.windowScrollerRef }
-							followSource={ READER_SUBSCRIPTIONS }
 							rowRenderer={ siteRowRenderer }
 						/> }
 					{ noSitesMatchQuery &&

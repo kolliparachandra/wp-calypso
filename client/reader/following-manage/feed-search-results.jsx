@@ -53,15 +53,12 @@ const FollowingManageSearchFeedsResults = ( {
 		);
 	}
 
-	function recordResultRender( index ) {
-		return function( railcar ) {
-			recordTracksRailcarRender(
-				'following_manage_search',
-				railcar,
-				{ ui_algo: 'following_manage_search', ui_position: index }
-			);
-		};
-	}
+	const recordResultRender = index => railcar =>
+		recordTracksRailcarRender(
+			'following_manage_search',
+			railcar,
+			{ ui_algo: 'following_manage_search', ui_position: index }
+		);
 
 	if ( ! showMoreResults ) {
 		const resultsToShow = map(
@@ -102,13 +99,16 @@ const FollowingManageSearchFeedsResults = ( {
 	return (
 		<div className={ classNames }>
 			<InfiniteStream
-				showLastUpdatedDate={ false }
+				extraRenderItemProps={ {
+					showLastUpdatedDate: false,
+					followSource: READER_FOLLOWING_MANAGE_SEARCH_RESULT,
+					recordResultRender
+				} }
 				items={ searchResults }
 				width={ width }
 				fetchNextPage={ fetchNextPage }
 				hasNextPage={ hasNextPage }
 				forceRefresh={ forceRefresh }
-				followSource={ READER_FOLLOWING_MANAGE_SEARCH_RESULT }
 				rowRenderer={ siteRowRenderer }
 			/>
 		</div>
