@@ -17,7 +17,7 @@ import ReaderSubscriptionListItemPlaceholder
 import { READER_FOLLOWING_MANAGE_SEARCH_RESULT } from 'reader/follow-button/follow-sources';
 import { recordTracksRailcarRender } from 'reader/stats';
 import InfiniteStream from 'components/reader-infinite-stream';
-import { sitesRowRenderer } from 'components/reader-infinite-stream/row-renderers';
+import { siteRowRenderer } from 'components/reader-infinite-stream/row-renderers';
 
 const FollowingManageSearchFeedsResults = ( {
 	showMoreResults,
@@ -109,7 +109,7 @@ const FollowingManageSearchFeedsResults = ( {
 				hasNextPage={ hasNextPage }
 				forceRefresh={ forceRefresh }
 				followSource={ READER_FOLLOWING_MANAGE_SEARCH_RESULT }
-				rowRenderer={ sitesRowRenderer }
+				rowRenderer={ siteRowRenderer }
 			/>
 		</div>
 	);
