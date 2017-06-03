@@ -32,3 +32,30 @@
 		}
 	}
 }
+
+.share-widget__service .social-logo {
+
+	&.facebook {
+		color: $color-facebook;
+	}
+
+	&.twitter {
+		color: $color-twitter;
+	}
+
+	&.google-plus {
+		color: $color-gplus;
+	}
+
+	&.linkedin {
+		color: $color-linkedin;
+	}
+
+	&.tumblr {
+		color: $color-tumblr;
+	}
+
+	&.pinterest {
+		color: $color-pinterest;
+	}
+}
