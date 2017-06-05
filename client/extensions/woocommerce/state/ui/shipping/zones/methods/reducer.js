@@ -18,7 +18,7 @@ import flatRate from './flat-rate/reducer';
 import freeShipping from './free-shipping/reducer';
 import localPickup from './local-pickup/reducer';
 
-const builtInShippingMethods = {
+export const builtInShippingMethods = {
 	flat_rate: flatRate,
 	free_shipping: freeShipping,
 	local_pickup: localPickup,
