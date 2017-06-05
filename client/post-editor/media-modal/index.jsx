@@ -125,7 +125,7 @@ export class EditorMediaModal extends Component {
 		return {
 			filter: '',
 			detailSelectedIndex: 0,
-			source: false,
+			source: 'wpcom',  // XXX constant
 			gallerySettings: props.initialGallerySettings
 		};
 	}
