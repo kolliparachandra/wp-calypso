@@ -99,6 +99,14 @@ export class MediaLibraryFilterBar extends Component {
 		);
 	}
 
+	renderSourceItem() {
+		return (
+			<FilterItem onChange={ this.changeSource } value={ this.props.source === 'google_photos' ? 'wpcom' : 'google_photos' }>
+				{ this.props.source === 'google_photos' ? 'Photos from Google' : 'WordPress.com' }
+			</FilterItem>
+		);
+	}
+
 	renderSearchSection() {
 		if ( this.props.filterRequiresUpgrade ) {
 			return null;
@@ -131,6 +139,7 @@ export class MediaLibraryFilterBar extends Component {
 			<div className="media-library__filter-bar">
 				<SectionNav selectedText={ this.getFilterLabel( this.props.filter ) } hasSearch={ true }>
 					<SectionNavTabs>
+						{ this.renderSourceItem() }
 						{ this.renderTabItems() }
 					</SectionNavTabs>
 					{ this.renderSearchSection() }
