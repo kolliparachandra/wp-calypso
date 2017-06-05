@@ -38,7 +38,7 @@ export function createProduct( siteId, product, successAction = null, failureAct
 
 		const jetpackProps = { path: `/jetpack-blogs/${ siteId }/rest-api/` };
 		const httpProps = {
-			path: '/wc/v2/products',
+			path: '/wc/v3/products',
 			body: JSON.stringify( productData ),
 			json: true,
 		};
@@ -89,4 +89,3 @@ function isValidProduct( product ) {
 		product.type && ( 'string' === typeof product.type )
 	);
 }
-
