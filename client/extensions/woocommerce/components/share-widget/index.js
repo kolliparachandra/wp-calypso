@@ -117,7 +117,7 @@ class ShareWidget extends Component {
 	render = () => {
 		const { text, title, urlToShare } = this.props;
 		return (
-			<div className="share-widget__container" >
+			<div className="share-widget__container card">
 				<h2>{ title }</h2>
 				<p>{ text }</p>
 				{ this.renderServiceIcons( urlToShare ) }
