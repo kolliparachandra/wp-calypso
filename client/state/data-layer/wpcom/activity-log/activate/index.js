@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import { translate } from 'i18n-calypso';
+
+/**
  * Internal dependencies
  */
 import {
@@ -10,6 +15,7 @@ import {
 } from 'state/activity-log/actions';
 import { dispatchRequest } from 'state/data-layer/wpcom-http/utils';
 import { http } from 'state/data-layer/wpcom-http/actions';
+import { errorNotice } from 'state/notices/actions';
 
 const activateRewind = ( { dispatch }, action ) => {
 	dispatch( http( {
@@ -23,7 +29,11 @@ export const activateSucceeded = ( { dispatch }, { siteId } ) => {
 	dispatch( rewindActivateSuccess( siteId ) );
 };
 
-export const activateFailed = ( { dispatch }, { siteId } ) => {
+export const activateFailed = ( { dispatch }, { siteId }, next, { message } ) => {
+	dispatch( errorNotice( translate(
+		'Problem activating rewind: %(message)s',
+		{ args: { message } }
+	) ) );
 	dispatch( rewindActivateFailure( siteId ) );
 };
 
