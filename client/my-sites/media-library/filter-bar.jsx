@@ -84,7 +84,7 @@ export class MediaLibraryFilterBar extends Component {
 	};
 
 	renderTabItems() {
-		const tabs = [ '', 'images', 'documents', 'videos', 'audio' ];
+		const tabs = this.props.source === 'google_photos' ? [] : [ '', 'images', 'documents', 'videos', 'audio' ];
 
 		return map( tabs, filter =>
 			<FilterItem

@@ -73,7 +73,7 @@ export default React.createClass( {
 	renderUploadButtons() {
 		const { site, filter, onAddMedia } = this.props;
 
-		if ( ! userCan( 'upload_files', site ) ) {
+		if ( ! userCan( 'upload_files', site ) || this.props.source === 'google_photos' ) {
 			return;
 		}
 
@@ -112,6 +112,10 @@ export default React.createClass( {
 	},
 
 	renderSecondaryButtons() {
+		if ( this.props.source === 'google_photos' ) {
+			return;
+		}
+
 		return (
 			<MediaModalSecondaryActions
 				selectedItems={ this.props.selectedItems }
